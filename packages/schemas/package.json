@@ -1,0 +1,32 @@
+{
+  "name": "@finagent/schemas",
+  "version": "0.1.0",
+  "description": "JSON Schema definitions for FinAgent MCP tools",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "validate": "node dist/validate.js",
+    "generate-docs": "node dist/generate-docs.js"
+  },
+  "dependencies": {
+    "zod": "^3.22.4",
+    "zod-to-json-schema": "^3.22.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.0"
+  },
+  "files": [
+    "dist/",
+    "schemas/"
+  ],
+  "keywords": [
+    "finagent",
+    "mcp",
+    "json-schema",
+    "financial",
+    "api"
+  ]
+}

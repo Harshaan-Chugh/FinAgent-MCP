@@ -1,0 +1,28 @@
+{
+  "name": "finagent-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:mcp": "pnpm -C apps/mcp dev",
+    "dev:web": "pnpm -C apps/web dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "db:migrate": "psql postgres://postgres:postgres@localhost:5432/finagent -f db/migrations/0001_init.sql",
+    "infra:up": "docker compose -f infra/docker-compose.yml up -d",
+    "infra:down": "docker compose -f infra/docker-compose.yml down",
+    "eval": "pnpm -C tests/eval test"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.3",
+    "eslint": "^8.0.0",
+    "ts-node": "^10.9.2",
+    "nodemon": "^3.0.0"
+  }
+}

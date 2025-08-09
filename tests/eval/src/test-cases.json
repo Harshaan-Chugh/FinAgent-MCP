@@ -1,0 +1,307 @@
+[
+  {
+    "id": "banking_001",
+    "name": "List user accounts",
+    "description": "Should return all active accounts for user",
+    "tool": "list_accounts",
+    "input": {
+      "includeBalances": true
+    },
+    "expected": {
+      "hasData": true,
+      "minAccountCount": 1,
+      "hasBalances": true,
+      "requiredFields": ["id", "name", "type", "balance_current"]
+    },
+    "category": "banking",
+    "priority": "high"
+  },
+  {
+    "id": "banking_002", 
+    "name": "Get transactions for last 30 days",
+    "description": "Should return recent transactions with proper date filtering",
+    "tool": "list_transactions",
+    "input": {
+      "start": "2024-12-10",
+      "end": "2025-01-09",
+      "limit": 50
+    },
+    "expected": {
+      "hasData": true,
+      "minTransactionCount": 1,
+      "withinDateRange": true,
+      "requiredFields": ["id", "date", "amount", "merchant_name"]
+    },
+    "category": "banking",
+    "priority": "high"
+  },
+  {
+    "id": "banking_003",
+    "name": "Generate spending summary for last month", 
+    "description": "Should analyze spending patterns and provide category breakdowns",
+    "tool": "spending_summary",
+    "input": {
+      "window": "30d",
+      "groupBy": "category",
+      "topN": 5
+    },
+    "expected": {
+      "hasData": true,
+      "hasCategorySummary": true,
+      "hasSpendingTotals": true,
+      "maxCategories": 5
+    },
+    "category": "banking",
+    "priority": "high"
+  },
+  {
+    "id": "banking_004",
+    "name": "Search transactions by merchant",
+    "description": "Should filter transactions by specific merchant name",
+    "tool": "list_transactions",
+    "input": {
+      "start": "2024-01-01",
+      "end": "2025-01-09", 
+      "merchant": "Starbucks",
+      "limit": 20
+    },
+    "expected": {
+      "hasData": false,
+      "merchantFilter": "Starbucks",
+      "allTransactionsMatchMerchant": true
+    },
+    "category": "banking",
+    "priority": "medium"
+  },
+  {
+    "id": "investments_001",
+    "name": "Get investment holdings",
+    "description": "Should return all investment positions with values",
+    "tool": "get_holdings", 
+    "input": {
+      "sortBy": "value",
+      "sortOrder": "desc"
+    },
+    "expected": {
+      "hasData": true,
+      "hasTotalValue": true,
+      "sortedByValue": true,
+      "requiredFields": ["symbol", "quantity", "institution_value"]
+    },
+    "category": "investments",
+    "priority": "high"
+  },
+  {
+    "id": "investments_002",
+    "name": "Get investment transactions",
+    "description": "Should return buy/sell transactions and dividends",
+    "tool": "get_investment_transactions",
+    "input": {
+      "start": "2024-01-01",
+      "end": "2025-01-09",
+      "limit": 25
+    },
+    "expected": {
+      "hasData": false,
+      "withinDateRange": true,
+      "hasTransactionTypes": true
+    },
+    "category": "investments", 
+    "priority": "medium"
+  },
+  {
+    "id": "crypto_001",
+    "name": "Get crypto positions",
+    "description": "Should return cryptocurrency holdings with current values",
+    "tool": "get_crypto_positions",
+    "input": {
+      "sortBy": "value",
+      "includePriceData": true
+    },
+    "expected": {
+      "hasData": true,
+      "hasTotalValue": true,
+      "hasPriceData": true,
+      "requiredFields": ["symbol", "quantity", "market_value"]
+    },
+    "category": "crypto",
+    "priority": "high"
+  },
+  {
+    "id": "crypto_002",
+    "name": "Place crypto buy order (dry run)",
+    "description": "Should simulate a cryptocurrency purchase order",
+    "tool": "place_crypto_order",
+    "input": {
+      "symbol": "BTC",
+      "side": "buy", 
+      "quantity": 0.001,
+      "dry_run": true
+    },
+    "expected": {
+      "hasData": true,
+      "orderCreated": true,
+      "isDryRun": true,
+      "hasRiskAssessment": true,
+      "requiredFields": ["id", "symbol", "side", "quantity", "status"]
+    },
+    "category": "crypto",
+    "priority": "high"
+  },
+  {
+    "id": "crypto_003",
+    "name": "Place crypto sell order (dry run)",
+    "description": "Should simulate a cryptocurrency sell order", 
+    "tool": "place_crypto_order",
+    "input": {
+      "symbol": "ETH",
+      "side": "sell",
+      "quantity": 0.1,
+      "dry_run": true
+    },
+    "expected": {
+      "hasData": true,
+      "orderCreated": true,
+      "isDryRun": true,
+      "side": "sell"
+    },
+    "category": "crypto",
+    "priority": "medium"
+  },
+  {
+    "id": "crypto_004",
+    "name": "Large crypto order triggers safety",
+    "description": "Should force dry_run for large orders",
+    "tool": "place_crypto_order",
+    "input": {
+      "symbol": "BTC", 
+      "side": "buy",
+      "quantity": 1.0,
+      "dry_run": false
+    },
+    "expected": {
+      "hasData": true,
+      "forcedDryRun": true,
+      "hasSafetyWarnings": true
+    },
+    "category": "crypto",
+    "priority": "medium"
+  },
+  {
+    "id": "meta_001",
+    "name": "Generate context card",
+    "description": "Should create intelligent context summary from financial data",
+    "tool": "get_context_card", 
+    "input": {
+      "query": "My spending on dining last month",
+      "tokenBudget": 1000,
+      "includeAggregates": true
+    },
+    "expected": {
+      "hasData": true,
+      "hasContextCard": true,
+      "withinTokenBudget": true,
+      "hasInsights": true
+    },
+    "category": "meta",
+    "priority": "medium"
+  },
+  {
+    "id": "integration_001",
+    "name": "Multi-tool workflow",
+    "description": "Should work across multiple tools in sequence",
+    "tools": [
+      {
+        "tool": "list_accounts",
+        "input": {}
+      },
+      {
+        "tool": "list_transactions", 
+        "input": {
+          "start": "2024-12-01",
+          "end": "2025-01-01",
+          "limit": 10
+        }
+      },
+      {
+        "tool": "spending_summary",
+        "input": {
+          "window": "30d"
+        }
+      }
+    ],
+    "expected": {
+      "allToolsSucceed": true,
+      "consistentUserData": true
+    },
+    "category": "integration",
+    "priority": "high"
+  },
+  {
+    "id": "error_001", 
+    "name": "Invalid date range",
+    "description": "Should handle invalid date range gracefully",
+    "tool": "list_transactions",
+    "input": {
+      "start": "2025-01-01",
+      "end": "2024-01-01"
+    },
+    "expected": {
+      "hasError": true,
+      "errorType": "validation",
+      "errorMessage": "Start date must be before"
+    },
+    "category": "error_handling",
+    "priority": "medium"
+  },
+  {
+    "id": "error_002",
+    "name": "Unsupported crypto symbol", 
+    "description": "Should reject unsupported cryptocurrency symbols",
+    "tool": "place_crypto_order",
+    "input": {
+      "symbol": "INVALID",
+      "side": "buy",
+      "quantity": 1.0
+    },
+    "expected": {
+      "hasError": true,
+      "errorType": "validation",
+      "errorMessage": "Unsupported symbol"
+    },
+    "category": "error_handling", 
+    "priority": "low"
+  },
+  {
+    "id": "performance_001",
+    "name": "Large transaction query",
+    "description": "Should handle large result sets efficiently", 
+    "tool": "list_transactions",
+    "input": {
+      "start": "2024-01-01",
+      "end": "2025-01-01",
+      "limit": 1000
+    },
+    "expected": {
+      "respondsWithinTime": 5000,
+      "hasData": false,
+      "respectsLimit": true
+    },
+    "category": "performance",
+    "priority": "low"
+  },
+  {
+    "id": "security_001",
+    "name": "Rate limiting protection",
+    "description": "Should enforce rate limits on tool calls",
+    "tool": "list_accounts",
+    "input": {},
+    "repeatCount": 15,
+    "expected": {
+      "rateLimitTriggered": true,
+      "errorAfterLimit": true
+    },
+    "category": "security", 
+    "priority": "medium"
+  }
+]
