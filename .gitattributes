@@ -14,3 +14,4 @@ build/* linguist-generated=true
 tests/eval/results/* linguist-generated=true
 
 services/ingest/**/*.go linguist-language=Go
+apps/mcp/src/**/*.ts linguist-detectable=false
