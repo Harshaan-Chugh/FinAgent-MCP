@@ -4,7 +4,6 @@
 
 *.json linguist-detectable=false
 *.md linguist-documentation=true
-*.sql linguist-detectable=false
 package-lock.json linguist-generated=true
 go.sum linguist-generated=true
 
