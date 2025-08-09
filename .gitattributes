@@ -1,0 +1,17 @@
+*.go linguist-language=Go
+*.ts linguist-language=TypeScript
+*.js linguist-language=JavaScript
+
+*.json linguist-detectable=false
+*.md linguist-documentation=true
+*.sql linguist-detectable=false
+package-lock.json linguist-generated=true
+go.sum linguist-generated=true
+
+node_modules/* linguist-vendored=true
+dist/* linguist-generated=true
+build/* linguist-generated=true
+tests/eval/results/* linguist-generated=true
+
+services/ingest/**/*.go linguist-language=Go
+apps/mcp/src/**/*.ts linguist-detectable=false
