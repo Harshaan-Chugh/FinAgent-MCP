@@ -69,35 +69,3 @@ JAEGER_ENDPOINT=http://localhost:14268/api/traces
 NODE_ENV=development
 LOG_LEVEL=info
 ```
-
-## Quick Start
-
-1. **Setup environment:**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your actual credentials
-   ```
-
-2. **Start infrastructure:**
-   ```bash
-   pnpm infra:up
-   pnpm db:migrate
-   ```
-
-3. **Start services:**
-   ```bash
-   # Terminal 1: Go service
-   cd services/ingest && go run cmd/ingest/main.go
-   
-   # Terminal 2: MCP server
-   cd apps/mcp && pnpm dev
-   ```
-
-4. **Test the setup:**
-   ```bash
-   curl -X POST http://localhost:3001/tools/list_accounts \
-     -H "X-User-ID: dev-user-1" \
-     -d '{}'
-   ```
-
-See `DEVELOPMENT.md` for detailed setup instructions and development workflows.
