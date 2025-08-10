@@ -4,7 +4,7 @@ A production-ready MCP (Model Context Protocol) server for financial data integr
 
 ## About
 
-FinAgent MCP is a polyglot financial data platform that provides LLMs with structured access to banking, investment, and cryptocurrency data through a standardized MCP interface. The system combines Node.js MCP tooling with Go-based data ingestion to deliver real-time financial insights with full observability and audit trails.
+FinAgent MCP is a financial data platform that provides LLMs with structured access to banking, investment, and cryptocurrency data through a standardized MCP interface. The system combines Node.js MCP tooling with Go-based data ingestion to deliver real-time financial insights with full observability and audit trails.
 
 ## Architecture
 
