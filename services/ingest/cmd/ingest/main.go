@@ -35,11 +35,9 @@ func main() {
 	if err != nil {
 		log.Printf("Failed to initialize tracing: %v", err)
 	}
-	defer func() {
-		if tracerProvider != nil {
-			tracerProvider.Shutdown(ctx)
-		}
-	}()
+	if tracerProvider != nil {
+    	defer tracerProvider.Shutdown(ctx)
+	}
 
 	// Initialize database
 	db, err := database.Connect(cfg.DatabaseURL)
