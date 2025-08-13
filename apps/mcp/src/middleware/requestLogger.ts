@@ -13,9 +13,8 @@ export function requestLogger(req: Request, res: Response, next: NextFunction) {
     ip: req.ip,
   });
 
-  // Override res.end to log completion
-  const originalEnd = res.end;
-  res.end = function(chunk: any, encoding?: any) {
+  // Log completion when response finishes
+  res.on('finish', () => {
     const duration = Date.now() - start;
     
     logger.info('Request completed', {
@@ -26,10 +25,7 @@ export function requestLogger(req: Request, res: Response, next: NextFunction) {
       userId: req.headers['x-user-id'],
       ip: req.ip,
     });
-
-    // Call the original end method
-    originalEnd.call(this, chunk, encoding);
-  };
+  });
 
   next();
 }

@@ -2,15 +2,9 @@ import { z } from 'zod';
 import { logger } from '../utils/logger';
 import { withSpan } from '../utils/tracing';
 
-// Import all tools
+// Import working tools only
 import { listAccountsTool } from '../tools/plaid/listAccounts';
-import { listTransactionsTool } from '../tools/plaid/listTransactions';
-import { spendingSummaryTool } from '../tools/plaid/spendingSummary';
-import { getHoldingsTool } from '../tools/plaid/getHoldings';
-import { getInvestmentTransactionsTool } from '../tools/plaid/getInvestmentTransactions';
 import { getCryptoPositionsTool } from '../tools/robinhood/getCryptoPositions';
-import { placeCryptoOrderTool } from '../tools/robinhood/placeCryptoOrder';
-import { getContextCardTool } from '../tools/meta/getContextCard';
 
 export interface MCPTool {
   name: string;
@@ -48,19 +42,9 @@ class ToolRegistry {
     const toolsToRegister = [
       // Banking tools
       listAccountsTool,
-      listTransactionsTool,
-      spendingSummaryTool,
       
-      // Investment tools
-      getHoldingsTool,
-      getInvestmentTransactionsTool,
-      
-      // Crypto tools
+      // Crypto tools  
       getCryptoPositionsTool,
-      placeCryptoOrderTool,
-      
-      // Meta tools
-      getContextCardTool,
     ];
 
     for (const tool of toolsToRegister) {

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import fetch from 'node-fetch';
+import axios from 'axios';
 import { MCPTool } from '../../core/registry';
 import { config } from '../../config';
 import { logger } from '../../utils/logger';
@@ -142,20 +142,13 @@ export const placeCryptoOrderTool: MCPTool = {
       };
 
       // Call Go ingestion service
-      const response = await fetch(`${config.goServiceUrl}/rh/orders`, {
-        method: 'POST',
+      const response = await axios.post(`${config.goServiceUrl}/rh/orders`, orderRequest, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(orderRequest),
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Go service error: ${response.status} ${response.statusText} - ${errorText}`);
-      }
-
-      const result = await response.json() as any;
+      const result = response.data;
       
       if (!result.success) {
         throw new Error(result.error || 'Failed to place crypto order');

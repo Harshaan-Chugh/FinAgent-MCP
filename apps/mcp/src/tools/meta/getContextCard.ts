@@ -48,13 +48,13 @@ export const getContextCardTool: MCPTool = {
       });
 
       // Analyze query intent
-      const queryIntent = this.analyzeQueryIntent(args.query);
+      const queryIntent = analyzeQueryIntent(args.query);
 
       // Generate insights based on the packed context
-      const insights = this.generateInsights(contextCard, queryIntent);
+      const insights = generateInsights(contextCard, queryIntent);
 
       // Calculate quality metrics
-      const qualityMetrics = this.calculateQualityMetrics(contextCard, args);
+      const qualityMetrics = calculateQualityMetrics(contextCard, args);
 
       // Build evidence
       const evidence = [{
@@ -181,7 +181,7 @@ function generateInsights(contextCard: any, queryIntent: any): string[] {
   }
 
   if (queryIntent.entities.length > 0) {
-    const foundEntities = queryIntent.entities.filter(entity => 
+    const foundEntities = queryIntent.entities.filter((entity: string) => 
       contextCard.snippets.some((s: any) => s.content.toLowerCase().includes(entity))
     );
     if (foundEntities.length > 0) {

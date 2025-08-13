@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import fetch from 'node-fetch';
+import axios from 'axios';
 import { MCPTool } from '../../core/registry';
 import { config } from '../../config';
 import { logger } from '../../utils/logger';
@@ -84,18 +84,15 @@ export const getInvestmentTransactionsTool: MCPTool = {
       url.searchParams.set('end', args.end);
       url.searchParams.set('limit', args.limit.toString());
 
-      const response = await fetch(url.toString(), {
+      const response = await axios.get(url.toString(), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`Go service error: ${response.status} ${response.statusText}`);
-      }
 
-      const result = await response.json() as any;
+      const result = await response.data as any;
       
       if (!result.success) {
         throw new Error(result.error || 'Failed to fetch investment transactions');

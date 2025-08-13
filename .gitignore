@@ -301,3 +301,5 @@ core.*
 # Application specific
 jaeger-ui/
 prometheus-data/
+.claude
+2

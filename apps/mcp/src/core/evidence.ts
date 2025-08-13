@@ -238,7 +238,7 @@ class EvidenceBuilder {
             table: tableName,
             operation: 'count',
             field: 'category',
-            value: count,
+            value: count as number,
             count: data.length,
             groupBy: category,
           });

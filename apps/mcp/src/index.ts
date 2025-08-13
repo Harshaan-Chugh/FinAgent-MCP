@@ -17,7 +17,7 @@ import { evidenceBuilder } from './core/evidence';
 // Initialize tracing
 initializeTracing();
 
-const app = express();
+const app: express.Application = express();
 
 // Security middleware
 app.use(helmet());

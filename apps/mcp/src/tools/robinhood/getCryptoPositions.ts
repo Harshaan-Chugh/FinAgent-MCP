@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import fetch from 'node-fetch';
+import axios from 'axios';
 import { MCPTool } from '../../core/registry';
 import { config } from '../../config';
 import { logger } from '../../utils/logger';
@@ -57,18 +57,13 @@ export const getCryptoPositionsTool: MCPTool = {
       const url = new URL('/rh/positions', config.goServiceUrl);
       url.searchParams.set('user_id', context.userId);
 
-      const response = await fetch(url.toString(), {
-        method: 'GET',
+      const response = await axios.get(url.toString(), {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`Go service error: ${response.status} ${response.statusText}`);
-      }
-
-      const result = await response.json() as any;
+      const result = response.data;
       
       if (!result.success) {
         throw new Error(result.error || 'Failed to fetch crypto positions');
