@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -418,7 +417,7 @@ func (h *Handlers) GetMetrics(w http.ResponseWriter, r *http.Request) {
 
 	// Get some basic metrics from database
 	var userCount, accountCount, transactionCount int
-	
+
 	err := h.db.Pool.QueryRow(ctx, "SELECT COUNT(*) FROM users").Scan(&userCount)
 	if err != nil && err != pgx.ErrNoRows {
 		userCount = 0
@@ -435,11 +434,11 @@ func (h *Handlers) GetMetrics(w http.ResponseWriter, r *http.Request) {
 	}
 
 	metrics := map[string]interface{}{
-		"users":                    userCount,
-		"active_accounts":          accountCount,
-		"transactions_last_30d":    transactionCount,
-		"timestamp":                time.Now().UTC(),
-		"service_uptime_seconds":   time.Since(time.Now().Add(-time.Hour)).Seconds(), // placeholder
+		"users":                  userCount,
+		"active_accounts":        accountCount,
+		"transactions_last_30d":  transactionCount,
+		"timestamp":              time.Now().UTC(),
+		"service_uptime_seconds": time.Since(time.Now().Add(-time.Hour)).Seconds(), // placeholder
 	}
 
 	h.respondJSON(w, http.StatusOK, metrics)

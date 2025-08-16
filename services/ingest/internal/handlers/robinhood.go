@@ -130,9 +130,9 @@ func (h *Handlers) createCryptoOrder(ctx context.Context, req models.CryptoOrder
 								 price, status, dry_run, placed_at)
 		VALUES ($1, $2, $3, $4, $5, $6, 'pending', $7, NOW())
 		RETURNING id
-	`, req.UserID, req.Symbol, req.Side, req.Quantity, 
+	`, req.UserID, req.Symbol, req.Side, req.Quantity,
 		getOrderType(req), req.Price, *req.DryRun).Scan(&orderID)
-	
+
 	return orderID, err
 }
 
@@ -140,7 +140,7 @@ func (h *Handlers) simulateCryptoOrder(ctx context.Context, orderID string, req 
 	// Simulate order execution with random delay
 	go func() {
 		time.Sleep(time.Duration(1+time.Now().Unix()%3) * time.Second)
-		
+
 		// Update order as filled
 		simulatedPrice := h.getSimulatedPrice(req.Symbol)
 		_, err := h.db.Pool.Exec(context.Background(), `
@@ -152,7 +152,7 @@ func (h *Handlers) simulateCryptoOrder(ctx context.Context, orderID string, req 
 				updated_at = NOW()
 			WHERE id = $1
 		`, orderID, simulatedPrice)
-		
+
 		if err != nil {
 			fmt.Printf("Failed to update simulated order: %v\n", err)
 		}
@@ -204,11 +204,11 @@ func (h *Handlers) getCryptoOrder(ctx context.Context, orderID string) (*models.
 		&order.AverageFillPrice, &order.Fees, &order.PlacedAt,
 		&order.FilledAt, &order.ErrorMessage,
 	)
-	
+
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return &order, nil
 }
 
@@ -222,17 +222,17 @@ func (h *Handlers) getOrderMessage(dryRun bool, side, symbol string) string {
 func (h *Handlers) getSimulatedPrice(symbol string) float64 {
 	// Return simulated prices for common crypto symbols
 	prices := map[string]float64{
-		"BTC":  45000.00 + (time.Now().Unix()%1000 - 500),
-		"ETH":  3200.00 + (time.Now().Unix()%200 - 100),
+		"BTC":  45000.00 + float64(time.Now().Unix()%1000-500),
+		"ETH":  3200.00 + float64(time.Now().Unix()%200-100),
 		"DOGE": 0.08 + float64(time.Now().Unix()%10-5)/1000,
 		"ADA":  0.45 + float64(time.Now().Unix()%20-10)/1000,
-		"SOL":  95.00 + (time.Now().Unix()%50 - 25),
+		"SOL":  95.00 + float64(time.Now().Unix()%50-25),
 	}
-	
+
 	if price, exists := prices[symbol]; exists {
 		return price
 	}
-	
+
 	// Default price for unknown symbols
 	return 1.00 + float64(time.Now().Unix()%100)/100
 }

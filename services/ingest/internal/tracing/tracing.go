@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"go.opentelemetry.io/otel/sdk/resource"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
@@ -45,7 +46,7 @@ func StartSpan(ctx context.Context, spanName string) (context.Context, trace.Spa
 // AddSpanEvent adds an event to the current span
 func AddSpanEvent(span trace.Span, name string, attributes map[string]interface{}) {
 	attrs := make([]trace.EventOption, 0, len(attributes))
-	for key, value := range attributes {
+	for _, value := range attributes {
 		// Convert value to string for simplicity
 		attrs = append(attrs, trace.WithAttributes(
 			semconv.HTTPMethodKey.String(fmt.Sprintf("%v", value)),
@@ -58,16 +59,11 @@ func AddSpanEvent(span trace.Span, name string, attributes map[string]interface{
 func SetSpanError(span trace.Span, err error) {
 	if err != nil {
 		span.RecordError(err)
-		span.SetStatus(trace.Status{
-			Code:        trace.StatusCodeError,
-			Description: err.Error(),
-		})
+		span.SetStatus(codes.Error, err.Error())
 	}
 }
 
 // SetSpanSuccess marks a span as successful
 func SetSpanSuccess(span trace.Span) {
-	span.SetStatus(trace.Status{
-		Code: trace.StatusCodeOk,
-	})
+	span.SetStatus(codes.Ok, "success")
 }

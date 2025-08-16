@@ -130,7 +130,7 @@ func (h *Handlers) ExchangePublicToken(w http.ResponseWriter, r *http.Request) {
 	`
 
 	var plaidItemID string
-	err = h.db.Pool.QueryRow(ctx, query, req.UserID, encryptedToken, 
+	err = h.db.Pool.QueryRow(ctx, query, req.UserID, encryptedToken,
 		getStringValue(institution, "institution_id"),
 		getStringValue(institution, "name")).Scan(&plaidItemID)
 	if err != nil {
@@ -308,9 +308,9 @@ func (h *Handlers) syncAccounts(ctx context.Context, userID, plaidItemID, access
 				balance_limit = EXCLUDED.balance_limit,
 				updated_at = NOW()
 		`, account.ID, userID, plaidItemID, account.Name, account.Mask,
-			account.OfficialName, account.Type, account.Subtype, account.Currency,
-			account.BalanceCurrent, account.BalanceAvailable, account.BalanceLimit)
-		
+			account.OfficialName, account.Type, account.Subtype, getIsoCurrency(account.Balances),
+			account.Balances.Current, account.Balances.Available, account.Balances.Limit)
+
 		if err != nil {
 			return fmt.Errorf("failed to upsert account %s: %w", account.ID, err)
 		}
@@ -343,4 +343,15 @@ func getStringValue(data interface{}, key string) string {
 		}
 	}
 	return ""
+}
+
+// getIsoCurrency extracts currency from PlaidBalance
+func getIsoCurrency(balance models.PlaidBalance) string {
+	if balance.IsoCurrencyCode != nil {
+		return *balance.IsoCurrencyCode
+	}
+	if balance.UnofficialCurrencyCode != nil {
+		return *balance.UnofficialCurrencyCode
+	}
+	return "USD" // default
 }
