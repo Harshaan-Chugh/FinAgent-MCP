@@ -1,12 +1,8 @@
 # FinAgent MCP
 
-A production-ready MCP (Model Context Protocol) server for financial data integration, featuring Plaid banking/investment data and Robinhood cryptocurrency trading with advanced context engineering and evidence tracking.
+MCP (Model Context Protocol) server for financial data integration, featuring Plaid banking/investment data and Robinhood cryptocurrency trading with advanced context engineering and evidence tracking for a financial data platform that provides LLMs with structured access to banking, investment, and cryptocurrency data through a standardized MCP interface. The system combines Node.js MCP tooling with Go-based data ingestion to deliver real-time financial insights with full observability and audit trails.
 
-## About
-
-FinAgent MCP is a financial data platform that provides LLMs with structured access to banking, investment, and cryptocurrency data through a standardized MCP interface. The system combines Node.js MCP tooling with Go-based data ingestion to deliver real-time financial insights with full observability and audit trails.
-
-## Architecture
+## Architecture (Diagram via ChatGPT)
 
 ```
 [Node MCP Server] ──► [Go Ingestion Service] ──► [External APIs]
